@@ -21,6 +21,7 @@
     <Attention Text="Attention"/>
 	  <BarcodeFewError Text="The number of digits is less than the permissible minimum."/>
 	  <BarcodeManyError Text="The number of digits is greater than the allowable maximum."/>
+	  <BarcodeLengthMismatch Text="Number of characters mismatch."/>
     <CantFindObject Text="Can't find object"/>
     <CantLoadReport Text="Can't load the report {0}"/>
     <CantSaveReport Text="Can't save the report. The file may be write-protected."/>
@@ -1988,7 +1989,7 @@
     </Xml>
     <Csv>
       <ConfigureDatabase Text="Configure database"/>
-      <SelectFile Text="Select .csv file:"/>
+      <SelectFile Text="Select .csv file (path or url):"/>
       <Codepage Text="Codepage:"/>
       <Separator Text="Separator:"/>
       <FieldNames Text="Field names in first string"/>
@@ -2019,8 +2020,17 @@
       <Encoding Text="Encoding"/>
       <Input Text="Json or URL"/>
       <Schema Text="Json Schema"/>
+      <RequestHeaders Text="Request Headers"/>
+      <HeaderKey Text="Header"/>
+      <HeaderVal Text="Value"/>
       <ConfirmChanges Text="Json has been modified. Generate a new schema?" />
     </Json>
+    <MongoDB>
+      <Scheme Text="Scheme:"/>
+      <Host Text="Host:"/>
+      <Port Text="Port:"/>
+      <UseSsl Text="Use SSL"/>
+    </MongoDB>
   </ConnectionEditors>
   <ComponentMenu>
     <Component>
@@ -2121,30 +2131,32 @@
         <Barcode0 Text="2/5 Interleaved"/>
         <Barcode1 Text="2/5 Industrial"/>
         <Barcode2 Text="2/5 Matrix"/>
-        <Barcode3 Text="Codabar"/>
-        <Barcode4 Text="Code128"/>
-        <Barcode5 Text="Code39"/>
-        <Barcode6 Text="Code39 Extended"/>
-        <Barcode7 Text="Code93"/>
-        <Barcode8 Text="Code93 Extended"/>
-        <Barcode9 Text="EAN8"/>
-        <Barcode10 Text="EAN13"/>
-        <Barcode11 Text="MSI"/>
-        <Barcode12 Text="PostNet"/>
-        <Barcode13 Text="UPC-A"/>
-        <Barcode14 Text="UPC-E0"/>
-        <Barcode15 Text="UPC-E1"/>
-        <Barcode16 Text="Supplement 2"/>
-        <Barcode17 Text="Supplement 5"/>
-        <Barcode18 Text="PDF417"/>
-        <Barcode19 Text="Datamatrix"/>
-        <Barcode20 Text="QR Code"/>
-        <Barcode21 Text="Aztec"/>
-        <Barcode22 Text="Plessey"/>
-        <Barcode23 Text="GS1-128 (UCC/EAN-128)"/>
-        <Barcode24 Text="Pharmacode"/>
-        <Barcode25 Text="Intelligent Mail (USPS)"/>
-        <Barcode26 Text="MaxiCode"/>
+        <Barcode3 Text="Deutsche Identcode"/>
+        <Barcode4 Text="ITF-14"/>
+        <Barcode5 Text="Codabar"/>
+        <Barcode6 Text="Code128"/>
+        <Barcode7 Text="Code39"/>
+        <Barcode8 Text="Code39 Extended"/>
+        <Barcode9 Text="Code93"/>
+        <Barcode10 Text="Code93 Extended"/>
+        <Barcode11 Text="EAN8"/>
+        <Barcode12 Text="EAN13"/>
+        <Barcode13 Text="MSI"/>
+        <Barcode14 Text="PostNet"/>
+        <Barcode15 Text="UPC-A"/>
+        <Barcode16 Text="UPC-E0"/>
+        <Barcode17 Text="UPC-E1"/>
+        <Barcode18 Text="Supplement 2"/>
+        <Barcode19 Text="Supplement 5"/>
+        <Barcode20 Text="PDF417"/>
+        <Barcode21 Text="Datamatrix"/>
+        <Barcode22 Text="QR Code"/>
+        <Barcode23 Text="Aztec"/>
+        <Barcode24 Text="Plessey"/>
+        <Barcode25 Text="GS1-128 (UCC/EAN-128)"/>
+        <Barcode26 Text="Pharmacode"/>
+        <Barcode27 Text="Intelligent Mail (USPS)"/>
+        <Barcode28 Text="MaxiCode"/>
       </Barcodes>
     </Barcode>
     <ZipCodeObject>
@@ -2240,6 +2252,7 @@
     <Image Text="Export to Image">
       <File Text="Image file"/>
       <ImageFormat Text="Format:"/>
+      <ImageParceFormatException Text="The bitmap cannot be converted to the selected format."/>
       <Resolution Text="Resolution:"/>
       <Quality Text="Jpeg quality:"/>
       <SeparateFiles Text="Separate file for each page"/>
@@ -2611,6 +2624,10 @@
     <EnterPage Text="Enter the page number to jump"/>
     <TotalPages Text="Total pages (read only)"/>
     <Back Text="Back"/>
+	<ScriptSecurity>
+	    <ForbiddenType Text="Please, don't use the type {typeName}"/>
+		<ForbiddenMethod Text="Please, don't use the method {methodName}"/>
+	</ScriptSecurity>
   </Web>
   <Properties>
     <Categories>

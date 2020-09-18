@@ -396,6 +396,11 @@ namespace FastReport.Code
             if (Config.TempFolder != null)
                 cp.TempFiles = new TempFileCollection(Config.TempFolder, false);
 
+            if (Config.WebMode &&
+                Config.EnableScriptSecurity &&
+                Config.ScriptSecurityProps.AddStubClasses)
+                AddStubClasses();
+
             string errors = string.Empty;
             CompilerResults cr;
             bool exception = !InternalCompile(cp, out cr);
@@ -407,7 +412,7 @@ namespace FastReport.Code
             if (exception)
                 throw new CompilerException(errors);
         }
-
+        
         private string GetAssemblyHash(CompilerParameters cp)
         {
             StringBuilder assemblyHashSB = new StringBuilder();
@@ -472,6 +477,57 @@ namespace FastReport.Code
         {
             errors = string.Empty;
             List<string> assemblyList = new List<string>(4);
+            Regex regex;
+            
+            if (Config.WebMode && Config.EnableScriptSecurity)
+            {
+                for (int i=0; i < cr.Errors.Count; )
+                {
+                    CompilerError ce = cr.Errors[i];
+                    if (ce.ErrorNumber == "CS1685") // duplicate class
+                    {
+                        cr.Errors.Remove(ce);
+                        continue;
+                    }
+                    else if (ce.ErrorNumber == "CS0436") // user using a forbidden type 
+                    {
+                        const string pattern = "[\"'](\\S+)[\"']";
+                        regex = new Regex(pattern, RegexOptions.Compiled);
+                        string typeName = regex.Match(ce.ErrorText).Value;
+
+                        const string res = "Web,ScriptSecurity,ForbiddenType";
+                        string message = Res.TryGet(res);
+                        if(string.Equals(res, message))
+                            message = "Please, don't use the type " + typeName;
+                        else
+                            message = message.Replace("{typeName}", typeName); //$"Please, don't use the type {typeName}";
+
+                        ce.ErrorText = message;
+                        
+                    }
+                    else if (ce.ErrorNumber == "CS0117") // user using a forbidden method
+                    {
+                        const string pattern = "[\"'](\\S+)[\"']";
+                        regex = new Regex(pattern, RegexOptions.Compiled);
+                        MatchCollection mathes = regex.Matches(ce.ErrorText);
+                        if(mathes.Count > 1)
+                        {
+                            string methodName = mathes[1].Value;
+
+                            const string res = "Web,ScriptSecurity,ForbiddenMethod";
+                            string message = Res.TryGet(res);
+                            if (string.Equals(res, message))
+                                message = "Please, don't use the method " + methodName;
+                            else 
+                                message = message.Replace("{methodName}", methodName); //$"Please, don't use the method {methodName}";
+
+                            ce.ErrorText = message;
+                        }
+                    }
+
+                    i++;
+                }
+            }
 
             foreach (CompilerError ce in cr.Errors)
             {
@@ -481,7 +537,7 @@ namespace FastReport.Code
                     try
                     {
                         const string pattern = @"'(\S{1,}),";
-                        Regex regex = new Regex(pattern);
+                        regex = new Regex(pattern, RegexOptions.Compiled);
                         string assemblyName = regex.Match(ce.ErrorText).Groups[1].Value;   // Groups[1] include string without ' and , symbols
                         if (!assemblyList.Contains(assemblyName))
                             assemblyList.Add(assemblyName);
